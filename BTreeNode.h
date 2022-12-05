@@ -155,7 +155,15 @@ public:
 		cout << "]";
 	}
 
+	bool isFull(BTreeNode<T>* node) {
 
+		if (node->noOfFilledKeys == order - 1) {
+			return true;
+		}
+
+		return false;
+
+	}
 
 
 };
