@@ -11,7 +11,6 @@ int main() {
 	n.insert(30, n.root);
 	n.insert(20, n.root);
 	n.insert(40, n.root);
-	n.root->removeKeyIndex(1);
 	n.root->printKeys();
 
 	return 0;

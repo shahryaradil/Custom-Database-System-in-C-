@@ -35,30 +35,40 @@ public:
 
 	}
 
-	void insert(T d, BTreeNode<T>* node) {
+	void insert(T d, BTreeNode<T>* node, BTreeNode<T>* parent = NULL) {
+
+
 
 		if (node->isLeaf == true) {
 
 			if (!node->InsertKey(d)) {
-				node->clearNode();
+
+				splitChild(node, parent)
+
 			}
 
 		}
 		else
 		{
-			this->insert(d, this->nextNode(d, node));
+			this->insert(d, this->nextNode(d, node), node);
 		}
 
 
 
 	}
 
-	BTreeNode<T>* splitChild(int splitAt, BTreeNode<T>* node) {
+	void splitChild(BTreeNode<T>* node, BTreeNode<T>* parent) {
 
-		BTreeNode<T> childL(orderOfTree), childR(orderOfTree);
-
+		if (parent == NULL) {
+			parent = new BTreeNode<T>;
+			parent->setOrder(orderOfTree);
+			root = parent;
+		}
+		BTreeNode<T>* childL = new BTreeNode<T>(orderOfTree);
+		BTreeNode<T>* childR = new BTreeNode<T>(orderOfTree);
+		int splitAt = -1;
 		T keyRemoved;
-		int splitAt = (node->order / 2);
+		int splitAt = (ceil((double)node->order / 2) - 1);
 		keyRemoved = node->removeKeyIndex(splitAt);
 
 
@@ -72,10 +82,9 @@ public:
 			}
 		}
 
-		node->clearNode();
 		this->insert(keyRemoved, node);
 		node->isLeaf = false;
-		
+
 
 
 
