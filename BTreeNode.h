@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 using namespace std;
 
 
@@ -11,38 +12,32 @@ class BTreeNode
 {
 public:
 
-	T* keys = NULL;
-	BTreeNode<T>** childs = NULL;
+	vector<T> keys ;
+	vector<BTreeNode<T>> childs ;
 	int order;
-	bool isLeaf = 1;
+	bool isLeaf;
 	int noOfFilledKeys = 0;
 
 	BTreeNode()
 	{
-		keys = NULL;
-		childs = NULL;
 		order = 0;
-		isLeaf = 1;
+		isLeaf = true;
 		noOfFilledKeys = 0;
 
 	}
 
 
-	BTreeNode(int odr)
+	BTreeNode(int odr, bool leaf)
 	{
 		order = odr;
-		keys = new T[order - 1]{ NULL };
-		childs = new BTreeNode<T>*[order] {NULL};
-		isLeaf = 1;
+		isLeaf = leaf;
 		noOfFilledKeys = 0;
 
 	}
 
-	void setOrder(int odr) {
+	void setOrder(int odr, bool leaf) {
 		this->order = odr;
-		keys = new T[order - 1]{ NULL };
-		childs = new BTreeNode<T>*[order] {NULL};
-		isLeaf = 1;
+		isLeaf = leaf;
 		noOfFilledKeys = 0;
 
 	}
@@ -50,17 +45,24 @@ public:
 	bool InsertKey(T d) {
 
 
+		if (noOfFilledKeys + 1 >= order)
+			return false;
 
-		if (noOfFilledKeys < order - 1) {
+		for (int i = 0; i < noOfFilledKeys; i++)
+		{
+			if (d < keys[i]) {
+				keys.insert(keys.begin() + i, d);
+				noOfFilledKeys++;
+				return true;
 
-			keys[noOfFilledKeys] = d;
-			noOfFilledKeys++;
-			bubbleSort();
-			return 1;
+			}
 
 		}
 
-		return 0;
+		keys.push_back(d);
+		noOfFilledKeys++;
+
+		return true;
 
 
 
@@ -71,15 +73,8 @@ public:
 
 
 
-		for (int i = 0; i < order; i++)
-		{
-			if (keys[i] == d) {
-				keys[i] = INT_MAX;
-				bubbleSort();
-				noOfFilledKeys--;
-				return 1;
-			}
-		}
+		keys.erase(d);
+		noOfFilledKeys--;
 
 		return 0;
 
@@ -90,11 +85,11 @@ public:
 
 	T removeKeyIndex(int i) {
 
-
+		T ans = -1;
 
 		if (i < noOfFilledKeys) {
-			T ans = keys[i];
-			keys[i] = INT_MAX;
+			ans = keys[i];
+			keys.erase(ans);
 			return ans;
 		}
 
@@ -118,10 +113,8 @@ public:
 
 	void clearNode() {
 
-		for (int i = 0; i < noOfFilledKeys; i++)
-		{
-			keys[i] = INT_MAX;
-		}
+		keys.clear();
+		childs.clear();
 
 		noOfFilledKeys = 0;
 	}
@@ -149,7 +142,8 @@ public:
 		cout << endl << "[ ";
 		for (int i = 0; i < noOfFilledKeys; i++)
 		{
-			cout << keys[i] << " ";
+			T val = keys[i];
+			cout << val << " ";
 		}
 
 		cout << "]";

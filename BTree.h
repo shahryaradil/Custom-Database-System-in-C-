@@ -30,27 +30,29 @@ public:
 
 	void setOrder(int order, BTreeNode<T>* node) {
 
-		node->setOrder(orderOfTree);
+		node->setOrder(orderOfTree,true);
 
 
 	}
 
-	void insert(T d, BTreeNode<T>* node, BTreeNode<T>* parent = NULL) {
+	void insert(T d, BTreeNode<T>* node, BTreeNode<T>* parent = NULL, bool insertNonLeaf = false) {
+
+		
 
 
 
-		if (node->isLeaf == true) {
+		if (node->isLeaf == true || insertNonLeaf ) {
 
 			if (!node->InsertKey(d)) {
 
-				splitChild(node, parent)
+				//splitChild(node, parent);
 
 			}
 
 		}
 		else
 		{
-			this->insert(d, this->nextNode(d, node), node);
+			//this->insert(d, this->nextNode(d, node), node);
 		}
 
 
@@ -92,23 +94,23 @@ public:
 
 
 
-	BTreeNode<T>* nextNode(T d, BTreeNode<T>* node) {
+	/*BTreeNode<T>* nextNode(T d, BTreeNode<T>* node) {
 
 
 		for (int i = 0; i < node->noOfFilledKeys; i++)
 		{
 			if (d < node->keys[i]) {
-				return node->childs[i];
+				return node->childs.at(i);
 			}
 			else if (i == node->noOfFilledKeys - 1 && d > node->keys[i]) {
 
-				return node->childs[i + 1];
+				return node->childs.at(i+1);
 			}
 
 		}
 
 
-	}
+	}*/
 
 
 };
