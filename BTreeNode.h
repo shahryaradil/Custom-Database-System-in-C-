@@ -12,8 +12,8 @@ class BTreeNode
 {
 public:
 
-	vector<T> keys ;
-	vector<BTreeNode<T>> childs ;
+	vector<T> keys;
+	vector<BTreeNode<T>*> childs;
 	int order;
 	bool isLeaf;
 	int noOfFilledKeys = 0;
@@ -68,6 +68,36 @@ public:
 
 
 	}
+
+
+	bool InsertChild(BTreeNode<T>* child) {
+
+		//child->printKeys();
+
+		if (noOfFilledKeys + 1 > order)
+			return false;
+
+		for (int i = 0; i <= noOfFilledKeys; i++)
+		{
+			if (i < keys.size()) {
+
+				if (child->keys.back() < keys[i]) {
+
+					childs.insert(childs.begin() + i, child);
+					return true;
+
+				}
+			}
+
+		}
+
+		childs.push_back(child);
+
+		return true;
+
+
+	}
+
 
 	bool removeKey(T d) {
 
@@ -139,7 +169,7 @@ public:
 	void printKeys() {
 
 
-		cout << endl << "[ ";
+		cout <<  "[ ";
 		for (int i = 0; i < noOfFilledKeys; i++)
 		{
 			T val = keys[i];

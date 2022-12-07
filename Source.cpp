@@ -8,10 +8,22 @@ int main() {
 
 	BTree<int> n(4);
 
-	n.insert(30, n.root);
 	n.insert(20, n.root);
+	n.insert(30, n.root);
 	n.insert(40, n.root);
-	n.root->printKeys();
+	n.insert(50, n.root);
+
+	n.insert(60, n.root);
+	//n.insert(70, n.root);
+	//n.insert(80, n.root);
+	//n.insert(90, n.root);
+
+	n.traverse(n.root);
+
+	/*n.root->printKeys();
+	n.root->childs[0]->printKeys();
+	n.root->childs[1]->printKeys();
+	n.root->childs[2]->printKeys();*/
 
 	//n.InsertKey(30);
 	//n.InsertKey(20);
