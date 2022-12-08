@@ -1,65 +1,96 @@
 #include <iostream>
-#include "BTreeNode.h"
 #include "BTree.h"
+
+//#include "BTree.h"
 
 using namespace std;
 
 int main() {
 
-	BTree<int> n(4);
+	BTree t(4); // A B-Tree with minimum degree 3
 
-	n.insert(20, n.root);
-	n.insert(30, n.root);
-	n.insert(40, n.root);
-	n.insert(50, n.root);
+	/*t.insert(10);
+	t.insert(20);
+	t.insert(5);
+	t.insert(6);
+	t.insert(12);
+	t.insert(30);
+	t.insert(7);
+	t.insert(17);
 
-	n.insert(60, n.root);
-	//n.insert(70, n.root);
-	//n.insert(80, n.root);
-	//n.insert(90, n.root);
 
-	n.traverse(n.root);
+	cout << "Traversal of the constructed tree is ";
+	t.traverse();
 
-	/*n.root->printKeys();
-	n.root->childs[0]->printKeys();
-	n.root->childs[1]->printKeys();
-	n.root->childs[2]->printKeys();*/
+	int k = 6;
+	(t.search(k) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";
 
-	//n.InsertKey(30);
-	//n.InsertKey(20);
-	//n.InsertKey(10);
-	//n.printKeys();
+	k = 15;
+	(t.search(k) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";*/
+
+
+
+
+	t.insert(1);
+	t.insert(3);
+	t.insert(7);
+	t.insert(10);
+	t.insert(11);
+	t.insert(13);
+	t.insert(14);
+	t.insert(15);
+	t.insert(18);
+	t.insert(16);
+	t.insert(19);
+	t.insert(24);
+	t.insert(25);
+	t.insert(26);
+	t.insert(21);
+	t.insert(4);
+	t.insert(5);
+	t.insert(20);
+	t.insert(22);
+	t.insert(2);
+	t.insert(17);
+	t.insert(12);
+	t.insert(6);
+
+	cout << "Traversal of tree constructed is\n";
+	t.traverse();
+	cout << endl;
+
+	t.remove(6);
+	cout << "Traversal of tree after removing 6\n";
+	t.traverse();
+	cout << endl;
+
+	t.remove(13);
+	cout << "Traversal of tree after removing 13\n";
+	t.traverse();
+	cout << endl;
+
+	t.remove(7);
+	cout << "Traversal of tree after removing 7\n";
+	t.traverse();
+	cout << endl;
+
+	t.remove(4);
+	cout << "Traversal of tree after removing 4\n";
+	t.traverse();
+	cout << endl;
+
+	t.remove(2);
+	cout << "Traversal of tree after removing 2\n";
+	t.traverse();
+	cout << endl;
+
+	t.remove(16);
+	cout << "Traversal of tree after removing 16\n";
+	t.traverse();
+	cout << endl;
+
 
 	return 0;
 }
 
 
-//int main()
-//{
-//
-//    // Create B-Tree
-//    BTree* tree = new BTree(3);
-//    cout << "After inserting 1 and 2" << endl;
-//    tree->insert(1);
-//    tree->insert(2);
-//    tree->display();
-//
-//    cout << "After inserting 5 and 6" << endl;
-//    tree->insert(5);
-//    tree->insert(6);
-//    tree->display();
-//
-//    cout << "After inserting 3 and 4" << endl;
-//    tree->insert(3);
-//    tree->insert(4);
-//    tree->display();
-//
-//    cout << "After inserting 7,8 and 9" << endl;
-//
-//    tree->insert(7);
-//    tree->insert(8);
-//    tree->insert(9);
-//    tree->display();
-//
-//    return 0;
-//}

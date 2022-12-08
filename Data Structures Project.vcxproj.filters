@@ -27,7 +27,7 @@
     <ClInclude Include="stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="trash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

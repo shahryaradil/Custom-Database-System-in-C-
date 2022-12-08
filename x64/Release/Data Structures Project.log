@@ -1,19 +1,6 @@
 ﻿  Source.cpp
-C:\Users\msasd\OneDrive\Desktop\Vs Code\Semester 3\Data st\Data Structures Project\BTree.h(78,44): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\msasd\OneDrive\Desktop\Vs Code\Semester 3\Data st\Data Structures Project\BTree.h(68): message : while compiling class template member function 'BTreeNode<T> *BTree<T>::splitChild(BTreeNode<T> *,BTreeNode<T> *)'
-          with
-          [
-              T=int
-          ]
-C:\Users\msasd\OneDrive\Desktop\Vs Code\Semester 3\Data st\Data Structures Project\BTree.h(47): message : see reference to function template instantiation 'BTreeNode<T> *BTree<T>::splitChild(BTreeNode<T> *,BTreeNode<T> *)' being compiled
-          with
-          [
-              T=int
-          ]
-C:\Users\msasd\OneDrive\Desktop\Vs Code\Semester 3\Data st\Data Structures Project\Source.cpp(9): message : see reference to class template instantiation 'BTree<int>' being compiled
   Generating code
-  1 of 183 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 31 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   Data Structures Project.vcxproj -> C:\Users\msasd\OneDrive\Desktop\Vs Code\Semester 3\Data st\Data Structures Project\x64\Release\Data Structures Project.exe

@@ -1,185 +1,110 @@
-#pragma once
+#include<iostream>
 #include "BTreeNode.h"
-#include "queue.h"
-#include <math.h> 
-
 using namespace std;
 
-template <class T>
+// A BTree node
+//template <class T>
+
+
 class BTree
 {
+	BTreeNode* root; // Pointer to root node
+	int order; // Minimum degree
 public:
 
-	BTreeNode <T>* root = NULL;
-	int orderOfTree;
-
-
-
-
-	BTree()
+	// Constructor (Initializes tree as empty)
+	BTree(int orderr)
 	{
 		root = NULL;
-		orderOfTree = 0;
+		order = orderr;
 	}
 
-	BTree(int order)
+	void traverse()
 	{
-		orderOfTree = order;
-		root = new BTreeNode<T>;
-		this->setOrder(order, root, true);
+		if (root != NULL) root->traverse();
 	}
 
-	void setOrder(int order, BTreeNode<T>* node, bool isLeaf) {
-
-		node->setOrder(orderOfTree, isLeaf);
-
-
+	// function to search a key in this tree
+	BTreeNode* search(int k)
+	{
+		return (root == NULL) ? NULL : root->search(k);
 	}
 
-	void insert(T d, BTreeNode<T>* node, BTreeNode<T>* parent = NULL, bool insertNonLeaf = false) {
+	// The main function that inserts a new key in this B-Tree
+	void insert(int k);
 
-
-
-		if (node->isLeaf == true || insertNonLeaf) {
-
-			if (!node->InsertKey(d)) {
-
-				BTreeNode<T>* temp = splitChild(node, parent);
-				if (node == root) {
-
-					node = temp;
-					root = node;
-				}
-				this->insert(d, root);
-
-
-			}
-
-		}
-		else
-		{
-			this->insert(d, this->nextNode(d, node), node);
-		}
-
-
-
-	}
-
-	BTreeNode<T>* splitChild(BTreeNode<T>* node, BTreeNode<T>* parent) {
-
-		if (parent == NULL) {
-			parent = new BTreeNode<T>;
-			parent->setOrder(orderOfTree, false);
-		}
-		BTreeNode<T>* childL = new BTreeNode<T>(orderOfTree, true);
-		BTreeNode<T>* childR = new BTreeNode<T>(orderOfTree, true);
-		int splitAt = -1;
-		T keyRemoved;
-		splitAt = (ceil((double)node->order / 2) - 1);
-		keyRemoved = node->keys[splitAt];
-
-
-		for (int i = 0; i < node->noOfFilledKeys; i++)
-		{
-			if (i < splitAt) {
-				childL->InsertKey(node->keys[i]);
-			}
-			else if (i > splitAt) {
-				childR->InsertKey(node->keys[i]);
-			}
-		}
-
-		//node->keys.erase(node->keys.begin() + splitAt);
-
-		parent->InsertKey(keyRemoved);
-		parent->InsertChild(childL);
-		parent->InsertChild(childR);
-		parent->isLeaf = false;
-		return parent;
-
-
-	}
-
-	void makeNewRoot(BTreeNode<T>* node) {
-
-
-
-		BTreeNode<T>* parent;
-
-		if (parent == NULL) {
-			parent = new BTreeNode<T>;
-			parent->setOrder(orderOfTree);
-			root = parent;
-		}
-		BTreeNode<T>* childL = new BTreeNode<T>(orderOfTree);
-		BTreeNode<T>* childR = new BTreeNode<T>(orderOfTree);
-		int splitAt = -1;
-		T keyRemoved;
-		int splitAt = (ceil((double)node->order / 2) - 1);
-		keyRemoved = node->removeKeyIndex(splitAt);
-
-
-		for (int i = 0; i < node->noOfFilledKeys; i++)
-		{
-			if (i < splitAt) {
-				childL.InsertKey(node->keys[i]);
-			}
-			else if (i > splitAt) {
-				childR.InsertKey(node->keys[i]);
-			}
-		}
-
-		this->insert(keyRemoved, node);
-		node->isLeaf = false;
-
-
-
-
-	}
-
-
-
-	BTreeNode<T>* nextNode(T d, BTreeNode<T>* node) {
-
-
-		for (int i = 0; i < node->noOfFilledKeys; i++)
-		{
-			if (d < node->keys[i]) {
-				return node->childs[i];
-			}
-			else if (i == node->noOfFilledKeys - 1 && d > node->keys[i]) {
-
-				return node->childs[i + 1];
-			}
-
-		}
-
-
-	}
-
-	void traverse(BTreeNode<T>* node) {
-
-		Queue<BTreeNode<T>*> nodeQue;
-		int count = -1;
-		nodeQue.Enqueue(node);
-
-		while (!nodeQue.empty())
-		{
-			BTreeNode<T>* temp = nodeQue.retFront();
-			nodeQue.Dequeue();
-			if (count / orderOfTree == 0) {
-				cout << "\t";
-			}
-			temp->printKeys();
-			for (int i = 0; i <= temp->noOfFilledKeys; i++)
-			{
-				if (!temp->isLeaf) {
-
-					nodeQue.Enqueue(temp->childs[i]);
-				}
-			}
-			count++;
-		}
-	}
+	// The main function that removes a new key in this B-Tree
+	void remove(int k);
 
 };
+
+
+
+
+
+// The main function that inserts a new key in this B-Tree
+void BTree::insert(int k)
+{
+	// If tree is empty
+	if (root == NULL)
+	{
+		// Allocate memory for root
+		root = new BTreeNode(order, true);
+		root->keys[0] = k; // Insert key
+		root->n = 1; // Update number of keys in root
+	}
+	else // If tree is not empty
+	{
+		// If root is full, then tree grows in height
+		if (root->n == order - 1)
+		{
+			// Allocate memory for new root
+			BTreeNode* s = new BTreeNode(order, false);
+
+			// Make old root as child of new root
+			s->C[0] = root;
+
+			// Split the old root and move 1 key to the new root
+			s->splitChild(0, root);
+
+			// New root has two children now. Decide which of the
+			// two children is going to have new key
+			int i = 0;
+			if (s->keys[0] < k)
+				i++;
+			s->C[i]->insertNonFull(k);
+
+			// Change root
+			root = s;
+		}
+		else // If root is not full, call insertNonFull for root
+			root->insertNonFull(k);
+	}
+}
+void BTree::remove(int k)
+{
+	if (!root)
+	{
+		cout << "The tree is empty\n";
+		return;
+	}
+
+	// Call the remove function for root
+	root->remove(k);
+
+	// If the root node has 0 keys, make its first child as the new root
+	// if it has a child, otherwise set root as NULL
+	if (root->n == 0)
+	{
+		BTreeNode* tmp = root;
+		if (root->leaf)
+			root = NULL;
+		else
+			root = root->C[0];
+
+		// Free the old root
+		delete tmp;
+	}
+	return;
+}
+
