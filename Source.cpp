@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
 
-	BTree t(4); // A B-Tree with minimum degree 3
+	BTree<int> t(4); // A B-Tree with minimum degree 3
 
 	/*t.insert(10);
 	t.insert(20);
@@ -88,6 +88,7 @@ int main() {
 	cout << "Traversal of tree after removing 16\n";
 	t.traverse();
 	cout << endl;
+
 
 
 	return 0;
