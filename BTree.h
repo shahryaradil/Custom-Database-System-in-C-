@@ -31,13 +31,15 @@ public:
 
 	// The main function that inserts a new key in this B-Tree
 	// The main function that inserts a new key in this B-Tree
-	void insert(T k) {
+	void insert(T k, string file_name, int line_number) {
 		// If tree is empty
 		if (root == NULL)
 		{
 			// Allocate memory for root
 			root = new BTreeNode<T>(order, true);
 			root->keys[0] = k; // Insert key
+			root->fileName[0] = file_name; // Insert key
+			root->lineNum[0] = line_number; // Insert key
 			root->n = 1; // Update number of keys in root
 		}
 		else // If tree is not empty
@@ -59,18 +61,19 @@ public:
 				int i = 0;
 				if (s->keys[0] < k)
 					i++;
-				s->C[i]->insertNonFull(k);
+				s->C[i]->insertNonFull(k, file_name, line_number);
 
 				// Change root
 				root = s;
 			}
 			else // If root is not full, call insertNonFull for root
-				root->insertNonFull(k);
+				root->insertNonFull(k, file_name, line_number);
 		}
 	}
 
 	// The main function that removes a new key in this B-Tree
-	void remove(T k) {
+	void Removee(T k)
+	{
 		if (!root)
 		{
 			cout << "The tree is empty\n";
@@ -78,7 +81,7 @@ public:
 		}
 
 		// Call the remove function for root
-		root->remove(k);
+		root->Removee(k);
 
 		// If the root node has 0 keys, make its first child as the new root
 		// if it has a child, otherwise set root as NULL
@@ -96,6 +99,23 @@ public:
 		return;
 	}
 
-};
+	void Display(T d) {
 
+		BTreeNode<T>* temp = root->search(d);
+		temp->Display(d);
+
+
+	}
+	void removeIndex(T d) {
+
+		BTreeNode<T>* temp = root->search(d);
+		bool isDeleted = true;
+
+
+		temp->removeFromFile(d);
+		temp->Removee(d);
+
+	}
+
+};
 
