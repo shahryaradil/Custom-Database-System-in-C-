@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 
 // A BTree node
@@ -7,6 +8,8 @@ template <class T>
 class BTreeNode
 {
 	T* keys; // An array of keys
+	vector<string>* fileLocatioon;
+	vector <int>* lineNum;
 	int order;	 // Minimum degree (defines the range for number of keys)
 	BTreeNode** C; // An array of child pointers
 	int n;	 // Current number of keys
@@ -21,6 +24,10 @@ public:
 
 		// Allocate memory for maximum number of possible keys
 		// and child pointers
+		fileLocatioon->reserve(_t);
+		fileLocatioon->resize(_t);
+		lineNum->reserve(_t);
+		lineNum->resize(_t);
 		keys = new int[order - 1];
 		C = new BTreeNode * [order];
 
@@ -87,7 +94,7 @@ public:
 	// A utility function to insert a new key in this node
 	// The assumption is, the node must be non-full when this
 	// function is called//
-	void insertNonFull(T k) {
+	void insertNonFull(T k, string fileLoc, int lineN) {
 		// Initialize index as index of rightmost element
 		int i = n - 1;
 
@@ -100,11 +107,15 @@ public:
 			while (i >= 0 && keys[i] > k)
 			{
 				keys[i + 1] = keys[i];
+				fileLocatioon[i + 1] = fileLocatioon[i];
+				lineNum[i + 1] = lineNum[i];
 				i--;
 			}
 
 			// Insert the new key at found location
 			keys[i + 1] = k;
+			fileLocatioon[i + 1].push_back(fileLoc);
+			lineNum[i + 1].push_back(lineN);
 			n = n + 1;
 		}
 		else // If this node is not leaf
@@ -141,8 +152,12 @@ public:
 		z->n = (order / 2) - 1;
 
 		// Copy the last (order-1) keys of y to z
-		for (int j = 0; j < (order / 2) - 1; j++)
+		for (int j = 0; j < (order / 2) - 1; j++) {
 			z->keys[j] = y->keys[j + (order / 2)];
+			z->fileLocatioon[j] = y->fileLocatioon[j + (order / 2)];
+			z->lineNum[j] = y->lineNum[j + (order / 2)];
+
+		}
 
 		// Copy the last order children of y to z
 		if (y->leaf == false)
@@ -164,11 +179,17 @@ public:
 
 		// A key of y will move to this node. Find location of
 		// new key and move all greater keys one space ahead
-		for (int j = n - 1; j >= i; j--)
+		for (int j = n - 1; j >= i; j--) {
 			keys[j + 1] = keys[j];
+			fileLocatioon[j + 1] = fileLocatioon[j];
+			lineNum[j + 1] = lineNum[j];
+
+		}
 
 		// Copy the middle key of y to this node
 		keys[i] = y->keys[(order / 2) - 1];
+		fileLocatioon[i] = y->fileLocatioon[(order / 2) - 1];
+		lineNum[i] = y->lineNum[(order / 2) - 1];
 
 		// Increment count of keys in this node
 		n = n + 1;
