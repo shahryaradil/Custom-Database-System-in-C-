@@ -99,14 +99,14 @@ public:
 		return;
 	}
 
-	void Display(T d) {
+	void PointSearch(T d) {
 
 		BTreeNode<T>* temp = root->search(d);
 		root->Display(d);
 
 
 	}
-	void removeIndex(T d) {
+	void deleteWithKey(T d) {
 
 	
 		BTreeNode<T>* temo = root->search(d);
@@ -122,7 +122,7 @@ public:
 		temo->traverse();
 
 	}
-	void range(T min, T max) {
+	void rangeSearchh(T min, T max) {
 
 		BTreeNode<T>* temp = root->search(min);
 

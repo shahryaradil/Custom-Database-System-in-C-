@@ -571,9 +571,9 @@ int main()
 	//bTreeString.Display("Diabetes mellitus (E10-E14)");
 
 	//bTreeString.removeIndex("Malignant neoplasms (C00-C97)");
-	bTreeString.removeIndex("Accidents (unintentional injuries) (V01-X59,Y85-Y86)");
+	bTreeString.deleteWithKey("Accidents (unintentional injuries) (V01-X59,Y85-Y86)");
 	//bTreeString.removeIndex("All Causes");
-	bTreeString.removeIndex("Diabetes mellitus (E10-E14)");
+	bTreeString.deleteWithKey("Diabetes mellitus (E10-E14)");
 	//bTreeString.Display("Alzheimer's disease (G30)");
 
 
