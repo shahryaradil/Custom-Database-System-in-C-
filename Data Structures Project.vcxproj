@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="BTree.h" />
     <ClInclude Include="BTreeNode.h" />
+    <ClInclude Include="Header.h" />
     <ClInclude Include="trash.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="queue.h" />
