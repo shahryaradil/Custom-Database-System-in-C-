@@ -102,18 +102,31 @@ public:
 	void Display(T d) {
 
 		BTreeNode<T>* temp = root->search(d);
-		temp->Display(d);
+		root->Display(d);
 
 
 	}
 	void removeIndex(T d) {
 
-		BTreeNode<T>* temp = root->search(d);
-		bool isDeleted = true;
+	
+		BTreeNode<T>* temo = root->search(d);
+		vector<string> dup;
+		root->fillDuplicates(d, dup);
+		root->removeFromFile(d, dup);
+		int i = 0;
+		while (i < 1000) {
+			Removee(d);
+			++i;
+		}
+		//cout << this->search(d) << endl;
+		temo->traverse();
 
+	}
+	void range(T min, T max) {
 
-		temp->removeFromFile(d);
-		temp->Removee(d);
+		BTreeNode<T>* temp = root->search(min);
+
+		root->rangeSearch(min, max);
 
 	}
 

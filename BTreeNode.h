@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<vector>
 using namespace std;
 
 // A BTree node
@@ -53,7 +54,7 @@ public:
 			C[i]->traverse();
 	}
 
-
+	
 
 	void Display(T d) {
 		// There are n keys and n+1 children, traverse through n keys
@@ -90,6 +91,26 @@ public:
 	// A function to search a key in subtree rooted with this node.
 	// Function to search key k in subtree rooted with this node//
 	BTreeNode* search(T k) {
+		// Find the first key greater than or equal to k
+		int i = 0;
+
+		while (i < n && k > keys[i])
+			i++;
+
+		// If the found key is equal to k, return this node
+		if (keys[i] == k) {
+			//cout << keys[i];
+			return this;
+		}
+
+		// If key is not found here and this is a leaf node
+		if (leaf == true)
+			return NULL;
+
+		// Go to the appropriate child
+		return C[i]->search(k);
+	}
+	bool searchBool(T k) {
 		// Find the first key greater than or equal to k
 		int i = 0;
 
@@ -229,29 +250,43 @@ public:
 		n = n + 1;
 	}
 
-	void removeFromFile(T d) {
+	void removeFromFile(T d, vector<string> dup) {
 		// There are n keys and n+1 children, traverse through n keys
 		// and first n children
 		fstream file, file2;
+		bool isFound = true;
 		string line;
+
 		int i;
 		for (i = 0; i < n; i++)
 		{
 			// If this is not leaf, then before printing key[i],
 			// traverse the subtree rooted with child C[i].
 			if (leaf == false)
-				C[i]->removeFromFile(d);
-			if (d != keys[i]) {
-
+				C[i]->removeFromFile(d, dup);
+			if (d == keys[i]) {
 				//cout << " " << keys[i] << "    fileLocation: " << fileName[i] << "   line number: " << lineNum[i] << endl;
 				file.open(fileName[i], ios::in);
-				file2.open("temp.csv", ios::out );
+				file2.open("temp.csv", ios::out);
+
 				for (int j = 1; getline(file, line); j++)
 				{
-						file2 << line ;
-						file2 << "\n";
+
+					for (int i = 0; i < dup.size(); i++)
+					{
+						if (dup.at(i) == line) {
+							isFound = false;
+						}
+
+					}
+					if (isFound) {
+						file2 << line << endl;
 						line.clear();
+					}
+					isFound = true;
+
 				}
+
 				file2.close();
 				file.close();
 				char tab2[1024];
@@ -260,15 +295,14 @@ public:
 				rename("temp.csv", tab2);
 			}
 
-			
+
 
 		}
 
-		
 
 		// Print the subtree rooted with last child
 		if (leaf == false)
-			C[i]->removeFromFile(d);
+			C[i]->removeFromFile(d, dup);
 	}
 
 	// A wrapper function to Removee the key k in subtree rooted with
@@ -295,7 +329,7 @@ public:
 			if (leaf)
 			{
 				cout << "The key " << k << " is does not exist in the tree\n";
-				return ;
+				return;
 			}
 
 			// The key to be removed is present in the sub-tree rooted with this node
@@ -316,7 +350,75 @@ public:
 			else
 				C[idx]->Removee(k);
 		}
-		return ;
+		return;
+	}
+
+	void rangeSearch(T min, T max) {
+		// There are n keys and n+1 children, traverse through n keys
+		// and first n children
+		fstream file;
+		string line;
+		int i;
+		for (i = 0; i < n; i++)
+		{
+			// If this is not leaf, then before printing key[i],
+			// traverse the subtree rooted with child C[i].
+			if (leaf == false) {
+				C[i]->rangeSearch(min, max);
+
+			}
+
+			if (keys[i] <= max) {
+				if (keys[i] >= min) {
+
+					file.open(fileName[i], ios::in);
+					for (int j = 1; getline(file, line); j++)
+					{
+						if (j == lineNum[i]) {
+							cout << line << endl;
+							line.clear();
+						}
+					}
+					file.close();
+				}
+			}
+		}
+
+		// Print the subtree rooted with last child
+		if (leaf == false)
+			C[i]->rangeSearch(min, max);
+	}
+
+	void fillDuplicates(T d, vector<string>& dup) {
+		// There are n keys and n+1 children, traverse through n keys
+		// and first n children
+		fstream file;
+		string line;
+		int i;
+		for (i = 0; i < n; i++)
+		{
+			// If this is not leaf, then before printing key[i],
+			// traverse the subtree rooted with child C[i].
+			if (leaf == false)
+				C[i]->fillDuplicates(d, dup);
+			if (d == keys[i]) {
+				//cout << " " << keys[i] << "    fileLocation: " << fileName[i] << "   line number: " << lineNum[i] << endl;
+				file.open(fileName[i], ios::in);
+				for (int j = 1; getline(file, line); j++)
+				{
+					if (j == lineNum[i]) {
+						dup.push_back(line);
+						line.clear();
+					}
+				}
+				file.close();
+			}
+		}
+
+
+		// Print the subtree rooted with last child
+		if (leaf == false)
+			C[i]->fillDuplicates(d, dup);
 	}
 
 	// A function to Removee the key present in idx-th position in
@@ -539,6 +641,7 @@ public:
 
 		// Pulling a key from the current node and inserting it into (order-1)th
 		// position of C[idx]
+
 		child->keys[(order / 2) - 1] = keys[idx];
 		child->fileName[(order / 2) - 1] = fileName[idx];
 		child->lineNum[(order / 2) - 1] = lineNum[idx];

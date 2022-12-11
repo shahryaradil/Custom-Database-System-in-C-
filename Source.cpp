@@ -373,7 +373,7 @@ int main()
 {
 	queue<string> fileQueue;
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_1.csv");
-	/*fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_2.csv");
+	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_2.csv");
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_3.csv");
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_4.csv");
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_5.csv");
@@ -382,7 +382,7 @@ int main()
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_8.csv");
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_9.csv");
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_10.csv");
-	AVL<int> avlTreeInt;*/
+	AVL<int> avlTreeInt;
 	AVL<float> avlTreeFloat;
 	AVL<string> avlTreeString;
 
@@ -534,7 +534,7 @@ int main()
 		}
 	}
 
-	
+
 	while ((opchoice != '1') && (opchoice != '2') && (opchoice != '3') && (opchoice != '4') && (opchoice != '5'))
 	{
 		cout << "----------------------------------\nSimple Database Management System\n----------------------------------\n\n";
@@ -542,6 +542,8 @@ int main()
 		cin >> opchoice;
 		system("CLS");
 	}
+
+	//bTreeString.removeIndex("Accidents (unintentional injuries) (V01-X59,Y85-Y86)");
 
 
 	if (idchoice == '2' || idchoice == '3' || idchoice == '4')
@@ -566,9 +568,17 @@ int main()
 
 	//cout << endl << "Display: \n";
 	//bTreeString.Display("Alzheimer's disease (G30)");
-	bTreeString.removeIndex("Alzheimer's disease (G30)");
-	//bTreeInt.removeIndex(2);
-	bTreeString.Display("Alzheimer's disease (G30)");
+	//bTreeString.Display("Diabetes mellitus (E10-E14)");
+
+	//bTreeString.removeIndex("Malignant neoplasms (C00-C97)");
+	bTreeString.removeIndex("Accidents (unintentional injuries) (V01-X59,Y85-Y86)");
+	//bTreeString.removeIndex("All Causes");
+	bTreeString.removeIndex("Diabetes mellitus (E10-E14)");
+	//bTreeString.Display("Alzheimer's disease (G30)");
+
+
+	//bTreeString.range("Accidents (unintentional injuries) (V01-X59,Y85-Y86)", "Alzheimer's disease (G30)");
+	//bTreeInt.range(2, 20);
 	//bTreeInt.Display(2);
 
 	return 0;
