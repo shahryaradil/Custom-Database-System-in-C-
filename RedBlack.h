@@ -1,7 +1,4 @@
 #pragma once
-#include<fstream>
-using namespace std;
-
 enum COLOR { RED, BLACK };
 
 template <class T>
@@ -624,6 +621,61 @@ public:
 		if (ptr->val < high)
 		{
 			rangeSearch(low, high, ptr->right);
+		}
+	}
+
+	void storeTree(RBNode<T>* ptr) {
+		if (ptr != NULL)
+		{
+			storeTree(ptr->left);
+			string fname = "RBTree/";
+
+			if (to_string(ptr->val) != "-1") {
+
+
+				fname += to_string(ptr->val);
+				fname += ".txt";
+				fstream file(fname, ios::out);
+				listNode<int>* temp = ptr->line.head;
+				listNode<string>* temp2 = ptr->location.head;
+				while (temp != NULL)
+				{
+					file << temp->data << "," << temp2->data << "\n";
+					temp2 = temp2->next;
+					temp = temp->next;
+				}
+
+			}
+			storeTree(ptr->right);
+		}
+	}
+
+
+	void printRB(string prefix, RBNode<T>* node, bool isLeft)
+	{
+		if (node != NULL)
+		{
+			cout << prefix;
+			if (isLeft)
+			{
+				cout << "|---->";
+			}
+			else {
+				cout << "L---->";
+			}
+			// print the value of the node
+			cout << node->val << endl;
+			// enter the next tree level - left and right branch
+			if (isLeft)
+			{
+				printRB(prefix + "|   ", node->right, true);
+				printRB(prefix + "|   ", node->left, false);
+			}
+			else {
+				printRB(prefix + "    ", node->right, true);
+				printRB(prefix + "    ", node->left, false);
+			}
+
 		}
 	}
 

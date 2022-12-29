@@ -2,7 +2,10 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+#include <string>
 using namespace std;
+
+
 
 
 // A BTree node
@@ -46,21 +49,24 @@ public:
 			C[i]->traverse();
 	}
 
-	void StoreTree() {
-		fstream filee;
+	void StoreTree(bool isNum) {
+		/*fstream filee;
 		int i;
 
 		for (i = 0; i < n; i++)
 		{
-			filee.open("Btree.txt", ios::out | ios::app);
+			if (leaf == false)
+				C[i]->StoreTree(isNum);
+			string fileN;
+			fileN = to_string((int)keys[i]);
+			filee.open("./BTree/" + fileN + ".csv", ios::out | ios::app);
 			filee << keys[i] << "," << fileName[i] << "," << lineNum[i] << "," << endl;
 			filee.close();
-			if (leaf == false)
-				C[i]->StoreTree();
+
 
 		}
 		if (leaf == false)
-			C[i]->StoreTree();
+			C[i]->StoreTree(isNum);*/
 	}
 
 	void Display(T d) {
@@ -130,12 +136,9 @@ public:
 	}
 
 	void insertNonFull(T k, string file_name, int line_number) {
-		fstream filee;
 		int i = n - 1;
 
-		filee.open("Btree.txt", ios::out | ios::app);
-		filee << k << "," << file_name << "," << line_number << "," << endl;
-		filee.close();
+
 
 
 		if (leaf == true)
@@ -173,10 +176,10 @@ public:
 				if (keys[i + 1] < k)
 					i++;
 			}
-			
+
 			C[i + 1]->insertNonFull(k, file_name, line_number);
 		}
-		
+
 	}
 
 	void splitChild(int i, BTreeNode* y) {
@@ -588,12 +591,20 @@ public:
 	}
 
 	void storeTree() {
-
+		root->StoreTree(true);
 	}
 
 
 	void insert(T k, string file_name, int line_number) {
 
+
+		fstream filee;
+		if (to_string(k) != "-1") {
+
+			filee.open("./BTree/" + to_string(k) + ".txt", ios::out | ios::app);
+			filee << k << "," << file_name << "," << line_number << "," << endl;
+			filee.close();
+		}
 		if (root == NULL)
 		{
 
@@ -627,7 +638,6 @@ public:
 				root->insertNonFull(k, file_name, line_number);
 
 		}
-		//root->StoreTree();
 	}
 
 
@@ -670,7 +680,7 @@ public:
 		root->fillDuplicates(d, dup);
 		root->removeFromFile(d, dup);
 		int i = 0;
-		while (i < 500) {
+		while (i < 50) {
 			Removee(d);
 			++i;
 		}

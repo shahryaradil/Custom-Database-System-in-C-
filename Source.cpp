@@ -7,13 +7,22 @@
 #include "AVLTree.h"
 #include "RedBlack.h"
 #include "Btree.h"
+#include <filesystem>
+#include <direct.h>
 
 using namespace std;
+namespace fs = std::filesystem;
 
-int main()
-{
+void delete_dir_content(const fs::path& dir_path) {
+	for (auto& path : fs::directory_iterator(dir_path)) {
+		fs::remove_all(path);
+	}
+}
+
+
+void mainMenu() {
 	queue<string> fileQueue;
-	/*fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_2.csv");
+	/*fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_2.csv");s
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_3.csv");
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_4.csv");
 	fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_5.csv");
@@ -29,15 +38,19 @@ int main()
 	RBTree<int> RBTreeInt;
 	RBTree<float> RBTreeFloat;
 	RBTree<string> RBTreeString;
-	BTree<int> BtreeInt(4);
-	BTree<float> BtreeFloat(4);
-	BTree<string> BtreeString(4);
-	remove("Btree.txt");
-	remove("RBTree.txt");
-	remove("AVLBtree.txt");
+
+	//////////////////////////////////////////////////////////////////Manage Directorires//////////////////////////////////////////////////////////////////
+	_mkdir("BTree");
+	delete_dir_content("./BTree/");
+	_mkdir("AVLTree");
+	delete_dir_content("./AVLTree/");
+	_mkdir("RBTree");
+	delete_dir_content("./RBTree/");
+
+
 
 	char treechoice = '&', idchoice = '$', opchoice = '&';
-	int bTreeOrder = 0;
+	int bTreeOrder = 4;
 	while ((treechoice != '1') && (treechoice != '2') && (treechoice != '3'))
 	{
 		cout << "----------------------------------\nSimple Database Management System\n----------------------------------\n\n";
@@ -52,6 +65,9 @@ int main()
 		cin >> bTreeOrder;
 		system("CLS");
 	}
+	BTree<int> BtreeInt(bTreeOrder);
+	BTree<float> BtreeFloat(bTreeOrder);
+	BTree<string> BtreeString(bTreeOrder);
 	while ((idchoice != '1') && (idchoice != '2') && (idchoice != '3') && (idchoice != '4') && (idchoice != '5') && (idchoice != '6') && (idchoice != '7'))
 	{
 		cout << "----------------------------------\nSimple Database Management System\n----------------------------------\n\n";
@@ -59,7 +75,7 @@ int main()
 		cin >> idchoice;
 		system("CLS");
 	}
-	
+
 	idchoice--;
 	while (!fileQueue.empty())
 	{
@@ -101,6 +117,8 @@ int main()
 		}
 		file.close();
 
+		
+
 		if (treechoice == '1')
 		{
 			if (idchoice == '0' || idchoice == '1' || idchoice == '5') //int
@@ -111,7 +129,11 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][0]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
 						RBTreeInt.insert(stoi(fileInp[i][0]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][0]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 
@@ -122,7 +144,12 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][1]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
+
 						RBTreeInt.insert(stoi(fileInp[i][1]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][1]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 					}
@@ -132,7 +159,12 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][5]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
+
 						RBTreeInt.insert(stoi(fileInp[i][5]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][5]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 					}
@@ -145,9 +177,15 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeFloat.root = avlTreeFloat.insert(stof(fileInp[i][6]), i + 1, myFilePath, avlTreeFloat.root);
+						avlTreeFloat.storeTree(avlTreeFloat.root);
+
+
 						BtreeFloat.insert(stof(fileInp[i][6]), myFilePath, i + 1);
 						BtreeFloat.storeTree();
+
 						RBTreeFloat.insert(stof(fileInp[i][6]), i + 1, myFilePath);
+						RBTreeFloat.storeTree(RBTreeFloat.root);
+
 
 					}
 				}
@@ -159,9 +197,14 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][2], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
 						BtreeString.insert(fileInp[i][2], myFilePath, i + 1);
 						BtreeString.storeTree();
+
 						RBTreeString.insert(fileInp[i][2], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 					}
 				}
 				else if (idchoice == '3') //cause name
@@ -169,9 +212,14 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][3], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
+
 						BtreeString.insert(fileInp[i][3], myFilePath, i + 1);
 						BtreeString.storeTree();
 						RBTreeString.insert(fileInp[i][3], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 
 					}
 				}
@@ -180,9 +228,13 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][4], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
+
 						BtreeString.insert(fileInp[i][4], myFilePath, i + 1);
-						BtreeString.storeTree();
 						RBTreeString.insert(fileInp[i][4], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 					}
 				}
 			}
@@ -197,7 +249,12 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][0]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
+
 						RBTreeInt.insert(stoi(fileInp[i][0]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][0]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 
@@ -208,7 +265,12 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][1]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
+
 						RBTreeInt.insert(stoi(fileInp[i][1]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][1]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 					}
@@ -218,7 +280,12 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][5]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
+
 						RBTreeInt.insert(stoi(fileInp[i][5]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][5]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 					}
@@ -231,9 +298,14 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeFloat.root = avlTreeFloat.insert(stof(fileInp[i][6]), i + 1, myFilePath, avlTreeFloat.root);
+						avlTreeFloat.storeTree(avlTreeFloat.root);
+
 						BtreeFloat.insert(stof(fileInp[i][6]), myFilePath, i + 1);
 						BtreeFloat.storeTree();
+
 						RBTreeFloat.insert(stof(fileInp[i][6]), i + 1, myFilePath);
+						RBTreeFloat.storeTree(RBTreeFloat.root);
+
 
 					}
 				}
@@ -245,9 +317,14 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][2], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
+
 						BtreeString.insert(fileInp[i][2], myFilePath, i + 1);
 						BtreeString.storeTree();
 						RBTreeString.insert(fileInp[i][2], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 					}
 				}
 				else if (idchoice == '3') //cause name
@@ -255,9 +332,13 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][3], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
 						BtreeString.insert(fileInp[i][3], myFilePath, i + 1);
 						BtreeString.storeTree();
 						RBTreeString.insert(fileInp[i][3], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 
 					}
 				}
@@ -266,9 +347,13 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][4], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
 						BtreeString.insert(fileInp[i][4], myFilePath, i + 1);
 						BtreeString.storeTree();
 						RBTreeString.insert(fileInp[i][4], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 					}
 				}
 			}
@@ -283,7 +368,11 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][0]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
 						RBTreeInt.insert(stoi(fileInp[i][0]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][0]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 
@@ -294,7 +383,11 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][1]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
 						RBTreeInt.insert(stoi(fileInp[i][1]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][1]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 					}
@@ -304,7 +397,11 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeInt.root = avlTreeInt.insert(stoi(fileInp[i][5]), i + 1, myFilePath, avlTreeInt.root);
+						avlTreeInt.storeTree(avlTreeInt.root);
+
 						RBTreeInt.insert(stoi(fileInp[i][5]), i + 1, myFilePath);
+						RBTreeInt.storeTree(RBTreeInt.root);
+
 						BtreeInt.insert(stoi(fileInp[i][5]), myFilePath, i + 1);
 						BtreeInt.storeTree();
 					}
@@ -317,9 +414,14 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeFloat.root = avlTreeFloat.insert(stof(fileInp[i][6]), i + 1, myFilePath, avlTreeFloat.root);
+						avlTreeFloat.storeTree(avlTreeFloat.root);
+
 						BtreeFloat.insert(stof(fileInp[i][6]), myFilePath, i + 1);
 						BtreeFloat.storeTree();
+
 						RBTreeFloat.insert(stof(fileInp[i][6]), i + 1, myFilePath);
+						RBTreeFloat.storeTree(RBTreeFloat.root);
+
 
 					}
 				}
@@ -331,9 +433,13 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][2], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
 						BtreeString.insert(fileInp[i][2], myFilePath, i + 1);
 						BtreeString.storeTree();
 						RBTreeString.insert(fileInp[i][2], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 					}
 				}
 				else if (idchoice == '3') //cause name
@@ -341,9 +447,13 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][3], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
 						BtreeString.insert(fileInp[i][3], myFilePath, i + 1);
 						BtreeString.storeTree();
 						RBTreeString.insert(fileInp[i][3], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 
 					}
 				}
@@ -352,18 +462,22 @@ int main()
 					for (int i = 1; i < fileInp.size(); i++)
 					{
 						avlTreeString.root = avlTreeString.insert(fileInp[i][4], i + 1, myFilePath, avlTreeString.root);
+						avlTreeString.storeTree(avlTreeString.root);
+
 						BtreeString.insert(fileInp[i][4], myFilePath, i + 1);
 						BtreeString.storeTree();
 						RBTreeString.insert(fileInp[i][4], i + 1, myFilePath);
+						RBTreeString.storeTree(RBTreeString.root);
+
 					}
 				}
 			}
 		}
 	}
-	while ((opchoice != '1') && (opchoice != '2') && (opchoice != '3') && (opchoice != '4'))
+	while ((opchoice != '1') && (opchoice != '2') && (opchoice != '3') && (opchoice != '4') && (opchoice != '5'))
 	{
 		cout << "----------------------------------\nSimple Database Management System\n----------------------------------\n\n";
-		cout << "Choose operation to perform:\n1. Point search\n2. Range Search\n3. Update key, field, old value, new value\n4. Delete key\n\n";
+		cout << "Choose operation to perform:\n1. Point search\n2. Range Search\n3. Update key, field, old value, new value\n4. Delete key\n5. Print Tree\n";
 		cin >> opchoice;
 		system("CLS");
 	}
@@ -400,6 +514,22 @@ int main()
 				cin >> keyinput;
 				system("CLS");
 				avlTreeInt.deleteRecords(keyinput, avlTreeInt.root);
+				RBTreeInt.deleteRecords(keyinput, RBTreeInt.root);
+				BtreeInt.deleteWithKey(keyinput);
+
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+
+				avlTreeInt.storeTree(avlTreeInt.root);
+				RBTreeInt.storeTree(RBTreeInt.root);
+
+
+
+			}
+			else if (opchoice == '5') {
+				avlTreeInt.printAVL("", avlTreeInt.root, false);
 			}
 		}
 		if (idchoice == '2' || idchoice == '3' || idchoice == '4')
@@ -430,6 +560,20 @@ int main()
 				cin >> keyinput;
 				system("CLS");
 				avlTreeString.deleteRecords(keyinput, avlTreeString.root);
+				RBTreeString.deleteRecords(keyinput, RBTreeString.root);
+				BtreeString.deleteWithKey(keyinput);
+
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+
+				avlTreeString.storeTree(avlTreeString.root);
+				RBTreeString.storeTree(RBTreeString.root);
+				
+			}
+			else if (opchoice == '5') {
+				avlTreeString.printAVL("", avlTreeString.root, false);
 			}
 		}
 		if (idchoice == '6')
@@ -460,6 +604,21 @@ int main()
 				cin >> keyinput;
 				system("CLS");
 				avlTreeFloat.deleteRecords(keyinput, avlTreeFloat.root);
+				RBTreeFloat.deleteRecords(keyinput, RBTreeFloat.root);
+				BtreeFloat.deleteWithKey(keyinput);
+
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+
+
+				avlTreeFloat.storeTree(avlTreeFloat.root);
+				RBTreeFloat.storeTree(RBTreeFloat.root);
+
+			}
+			else if (opchoice == '5') {
+				avlTreeFloat.printAVL("", avlTreeFloat.root, false);
 			}
 		}
 	}
@@ -492,7 +651,16 @@ int main()
 				cout << "Enter Minimum Value : ";
 				cin >> keyinput;
 				system("CLS");
+				avlTreeInt.deleteRecords(keyinput, avlTreeInt.root);
+				RBTreeInt.deleteRecords(keyinput, RBTreeInt.root);
 				BtreeInt.deleteWithKey(keyinput);
+
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+				avlTreeInt.storeTree(avlTreeInt.root);
+				RBTreeInt.storeTree(RBTreeInt.root);
 			}
 		}
 		if (idchoice == '2' || idchoice == '3' || idchoice == '4')
@@ -522,7 +690,17 @@ int main()
 				cout << "Enter Minimum Value : ";
 				//cin.getline((keyinput,100);
 				system("CLS");
+				avlTreeString.deleteRecords(keyinput, avlTreeString.root);
+				RBTreeString.deleteRecords(keyinput, RBTreeString.root);
 				BtreeString.deleteWithKey(keyinput);
+
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+
+				avlTreeString.storeTree(avlTreeString.root);
+				RBTreeString.storeTree(RBTreeString.root);
 			}
 		}
 		if (idchoice == '6')
@@ -552,7 +730,19 @@ int main()
 				cout << "Enter Minimum Value : ";
 				cin >> keyinput;
 				system("CLS");
+				avlTreeFloat.deleteRecords(keyinput, avlTreeFloat.root);
+				RBTreeFloat.deleteRecords(keyinput, RBTreeFloat.root);
 				BtreeFloat.deleteWithKey(keyinput);
+
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+
+
+				avlTreeFloat.storeTree(avlTreeFloat.root);
+				RBTreeFloat.storeTree(RBTreeFloat.root);
+
 			}
 		}
 	}
@@ -587,6 +777,19 @@ int main()
 				system("CLS");
 				//RBTreeInt.deleteByVal(keyinput);
 				RBTreeInt.deleteRecords(keyinput, RBTreeInt.root);
+				avlTreeInt.deleteRecords(keyinput, avlTreeInt.root);
+				BtreeInt.deleteWithKey(keyinput);
+	
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+
+				avlTreeInt.storeTree(avlTreeInt.root);
+				RBTreeInt.storeTree(RBTreeInt.root);
+			}
+			else if (opchoice == '5') {
+				RBTreeInt.printRB("", RBTreeInt.root, false);
 			}
 		}
 		if (idchoice == '2' || idchoice == '3' || idchoice == '4')
@@ -618,6 +821,19 @@ int main()
 				system("CLS");
 				//RBTreeString.deleteByVal(keyinput);
 				RBTreeString.deleteRecords(keyinput, RBTreeString.root);
+				avlTreeString.deleteRecords(keyinput, avlTreeString.root);
+				BtreeString.deleteWithKey(keyinput);
+
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+
+				avlTreeString.storeTree(avlTreeString.root);
+				RBTreeString.storeTree(RBTreeString.root);
+			}
+			else if (opchoice == '5') {
+				RBTreeString.printRB("", RBTreeString.root, false);
 			}
 		}
 		if (idchoice == '6')
@@ -649,9 +865,42 @@ int main()
 				system("CLS");
 				//RBTreeFloat.deleteByVal(keyinput);
 				RBTreeFloat.deleteRecords(keyinput, RBTreeFloat.root);
+				avlTreeFloat.deleteRecords(keyinput, avlTreeFloat.root);
+				BtreeFloat.deleteWithKey(keyinput);
+
+				_mkdir("AVLTree");
+				delete_dir_content("./AVLTree/");
+				_mkdir("RBTree");
+				delete_dir_content("./RBTree/");
+
+
+				avlTreeFloat.storeTree(avlTreeFloat.root);
+				RBTreeFloat.storeTree(RBTreeFloat.root);
+			}
+			else if (opchoice == '5') {
+				RBTreeFloat.printRB("", RBTreeFloat.root, false);
 			}
 		}
+
 	}
+
+
+}
+
+int main()
+{
+
+start:
+
+	mainMenu();
+	
+	string kk;
+
+	cout << "Press \'Y\' to Continue or \'N\' to terminate:";
+	cin >> kk;
+
+	if (kk == "Y"|| kk == "y")
+		goto start;
 
 
 	return 0;

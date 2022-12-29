@@ -6,7 +6,24 @@
 #include <sstream>
 #include <queue>
 
+// C program to create a folder
+#include <direct.h>
+
 using namespace std;
+
+template <class val_t>
+
+auto to_string(val_t val)
+{
+	if constexpr (std::is_same<val_t, std::string>::value)
+	{
+		return static_cast<std::string>(val);
+	}
+	else
+	{
+		return std::to_string(val);
+	}
+}
 
 
 //class Data {
@@ -234,21 +251,14 @@ public:
 	}
 
 	Node<T>* insert(T x, int l, string loc, Node<T>* ptr) {
-
-		fstream filee;
-
 		if (ptr == nullptr)
 		{
 			ptr = new Node<T>(x);
 			ptr->line.insert(l);
 			ptr->location.insert(loc);
-			filee.open("AVLTree.txt", ios::out | ios::app);
-			filee << x << "," << loc << "," << l << "," << endl;
-			filee.close();
 		}
 		else if (x < ptr->data) {
 			ptr->left = insert(x, l, loc, ptr->left);
-
 			if (getHeight(ptr->left) - getHeight(ptr->right) == 2)
 			{
 				if (x < ptr->left->data)
@@ -279,9 +289,6 @@ public:
 		{
 			ptr->line.insert(l);
 			ptr->location.insert(loc);
-			filee.open("AVLTree.txt", ios::out | ios::app);
-			filee << x << "," << loc << "," << l << "," << endl;
-			filee.close();
 		}
 
 		ptr->height = findMax(getHeight(ptr->left), getHeight(ptr->right)) + 1;
@@ -526,16 +533,16 @@ public:
 
 	void Update(duplicateList<string>& sl) {
 		queue<string> fileQueue;
-		/*fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_2.csv");
-		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_3.csv");
-		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_4.csv");
-		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_5.csv");
-		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_6.csv");
-		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_7.csv");
-		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_9.csv");
-		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_10.csv");*/
 		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_1.csv");
 		fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_8.csv");
+		//fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_3.csv");
+		//fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_4.csv");
+		//fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_5.csv");
+		//fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_6.csv");
+		//fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_7.csv");
+		//fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_8.csv");
+		//fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_9.csv");
+		//fileQueue.push("NCHS_-_Leading_Causes_of_Death__United_States_10.csv");
 
 		while (!fileQueue.empty())
 		{
@@ -600,4 +607,82 @@ public:
 			rangeSearch(low, high, ptr->right);
 		}
 	}
+
+	void printAVL(string prefix, Node<T>* node, bool isLeft)
+	{
+		if (node != NULL)
+		{
+			cout << prefix;
+			if (isLeft)
+			{
+				cout << "|---->";
+			}
+			else {
+				cout << "L---->";
+			}
+			// print the value of the node
+			cout << node->data << endl;
+			// enter the next tree level - left and right branch
+			if (isLeft)
+			{
+				printAVL(prefix + "|   ", node->right, true);
+				printAVL(prefix + "|   ", node->left, false);
+			}
+			else {
+				printAVL(prefix + "    ", node->right, true);
+				printAVL(prefix + "    ", node->left, false);
+			}
+
+		}
+	}
+
+	void storeTree(Node<T>* ptr) {
+		if (ptr != NULL)
+		{
+			storeTree(ptr->left);
+			string fname = "AVLTree/";
+
+			if (to_string(ptr->data) != "-1") {
+
+				fname += to_string(ptr->data);
+
+				fname += ".txt";
+				fstream file(fname, ios::out);
+				listNode<int>* temp = ptr->line.head;
+				listNode<string>* temp2 = ptr->location.head;
+				while (temp != NULL)
+				{
+					file << temp->data << "," << temp2->data << "\n";
+					temp2 = temp2->next;
+					temp = temp->next;
+				}
+			}
+
+			storeTree(ptr->right);
+		}
+	}
+
+	//void storeTreeString(Node<T>* ptr, bool isString) {
+	//	if (ptr != NULL)
+	//	{
+	//		storeTreeString(ptr->left, isString);
+	//		string fname = "AVLTree/";
+	//		if (isString)
+	//		{
+	//			fname += ptr->data;
+	//		}
+	//		fname += ".csv";
+	//		fstream file(fname, ios::out);
+	//		listNode<int>* temp = ptr->line.head;
+	//		listNode<string>* temp2 = ptr->location.head;
+	//		while (temp != NULL)
+	//		{
+	//			file << temp->data << "," << temp2->data << "\n";
+	//			temp2 = temp2->next;
+	//			temp = temp->next;
+	//		}
+
+	//		storeTreeString(ptr->right, isString);
+	//	}
+	//}
 };
